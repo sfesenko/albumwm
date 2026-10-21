@@ -17,7 +17,12 @@ type ConflictEntry = { description: string; source: 'albumwm' | 'gnome' };
 const KEYBINDINGS_KEY = 'org.gnome.shell.extensions.albumwm.keybindings';
 
 const actions = {
-    general: ['close-window', 'fullscreen-window-toggle', 'cycle-focus-modes'],
+    general: [
+        'close-window',
+        'fullscreen-window-toggle',
+        'cycle-focus-modes',
+        'show-shortcuts',
+    ],
     movements: [
         'focus-column-left',
         'focus-window-down',

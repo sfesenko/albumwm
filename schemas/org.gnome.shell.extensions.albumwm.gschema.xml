@@ -148,6 +148,10 @@
       <default><![CDATA[['<Super><Shift>c']]]></default>
       <summary>Cycle between window focus modes (default, center, edge)</summary>
     </key>
+    <key type="as" name="show-shortcuts">
+      <default><![CDATA[['<Super><Shift>slash']]]></default>
+      <summary>Show the keyboard shortcuts overlay</summary>
+    </key>
 
     <!-- Window movements -->
     <key type="as" name="focus-column-left">

@@ -14,6 +14,7 @@ import {
     Navigator,
     Floating,
     GnomeSettings,
+    ShortcutOverlay,
 } from './imports.js';
 
 import type { Extension } from 'resource:///org/gnome/shell/extensions/extension.js';
@@ -85,6 +86,7 @@ export function enable(extension: Extension) {
 }
 
 export function disable() {
+    ShortcutOverlay.disable();
     signals!.destroy();
     signals = null;
     actions!.forEach(disableAction);
@@ -479,6 +481,10 @@ export function setupActions(settings: Gio.Settings) {
         },
         Meta.KeyBindingFlags.PER_WINDOW
     );
+
+    registerAction('show-shortcuts', () => ShortcutOverlay.toggle(settings), {
+        settings,
+    });
 }
 
 export function idOf(mutterName: string) {

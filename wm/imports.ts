@@ -10,6 +10,7 @@ export * as Navigator from './navigator.js';
 export * as Patches from './patches.js';
 export * as Floating from './floating.js';
 export * as Settings from './settings.js';
+export * as ShortcutOverlay from './shortcutsoverlay.js';
 export * as Stackoverlay from './stackoverlay.js';
 export * as Tiling from './tiling.js';
 export * as Topbar from './topbar.js';
