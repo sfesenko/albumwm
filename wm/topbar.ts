@@ -31,6 +31,10 @@ export function enable(extension: Extension) {
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
     focusButton = new FocusButton();
 
+    const stale = (
+        Main.panel.statusArea as Record<string, Clutter.Actor | undefined>
+    )['FocusButton'];
+    stale?.destroy();
     Main.panel.addToStatusArea('FocusButton', focusButton, 1, 'left');
 
     /* Keep us right of the workspace pill; e.g. appindicator-support inserts
@@ -68,7 +72,7 @@ export function enable(extension: Extension) {
 export function disable() {
     signals!.destroy();
     signals = null;
-    focusButton!.destroy();
+    focusButton?.destroy();
     focusButton = null;
 
     gsettings = null;
