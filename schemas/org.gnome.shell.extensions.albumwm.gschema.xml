@@ -312,5 +312,15 @@
       <default><![CDATA[['<Super><Shift>x']]]></default>
       <summary>Switch focus between the floating and tiling layers</summary>
     </key>
+
+    <!-- Runtime setting restore backups -->
+    <key type="s" name="restore-attach-modal-dialogs">
+      <default>''</default>
+      <summary>Saved original value of org.gnome.mutter attach-modal-dialogs, restored on disable</summary>
+    </key>
+    <key type="s" name="restore-edge-tiling">
+      <default>''</default>
+      <summary>Saved original value of org.gnome.mutter edge-tiling, restored on disable</summary>
+    </key>
   </schema>
 </schemalist>

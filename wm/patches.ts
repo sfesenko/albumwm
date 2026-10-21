@@ -434,33 +434,28 @@ export function saveRuntimeDisable(
 ) {
     try {
         const origValue = schemaSettings.get_boolean(key);
-        schemaSettings.set_boolean(key, disableValue);
-
-        // save a backup copy to AlbumWM settings (for restore)
         const pkey = `restore-${key}`;
+        const hasBackup = gsettings!.settings_schema.has_key(pkey);
 
-        /**
-         * Now if albumwm settings has restore values, it means
-         * that they weren't previously restore properly (since on
-         * successful restore we clear the values).
-         */
-        if (gsettings!.get_string(pkey) === '') {
+        if (hasBackup && gsettings!.get_string(pkey) === '') {
             gsettings!.set_string(pkey, origValue.toString());
         }
 
-        // we want to restore from AlbumWM back settings (safer)
+        schemaSettings.set_boolean(key, disableValue);
+
         const restore = () => {
-            const value = gsettings!.get_string(pkey);
-            // if value is empty, do nothing
+            const value = hasBackup
+                ? gsettings!.get_string(pkey)
+                : origValue.toString();
             if (value === '') {
                 return;
             }
 
-            const bvalue = value === 'true';
-            schemaSettings.set_boolean(key, bvalue);
+            schemaSettings.set_boolean(key, value === 'true');
 
-            // after restore, empty albumwm saved value
-            gsettings!.set_string(pkey, '');
+            if (hasBackup) {
+                gsettings!.set_string(pkey, '');
+            }
         };
 
         runtimeDisables.push(restore);
@@ -552,6 +547,7 @@ export function enable(extension: Extension) {
 export function disable() {
     disableOverrides();
     restoreRuntimeDisables();
+    runtimeDisables.length = 0;
     actions!.forEach(a => global.stage.add_action(a));
     actions = null;
 
