@@ -89,11 +89,11 @@ export function disable() {
 }
 
 function setState(_: Gio.Settings | null, key: string) {
-    const value = gsettings!.get_value(key);
+    if (!gsettings || !prefs) return;
+    if (key.startsWith('restore-')) return;
+    const value = gsettings.get_value(key);
     const name = key.replace(/-/g, '_');
-    if (prefs) {
-        (prefs as Record<string, unknown>)[name] = value.deep_unpack();
-    }
+    (prefs as Record<string, unknown>)[name] = value.deep_unpack();
 }
 
 export function getConflictSettings() {
@@ -297,6 +297,7 @@ function removeGSettingWinpropsFromArray() {
  * org.gnome.shell.extensions.albumwm.winprops winprops.
  */
 function reloadWinpropsFromGSettings() {
+    if (!gsettings) return;
     removeGSettingWinpropsFromArray();
     addWinpropsFromGSettings();
 }
