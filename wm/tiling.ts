@@ -195,8 +195,8 @@ export function enable(extension: Extension) {
             return false; // on return false destroys timeout
         });
     };
-    gsettings.connect('changed::vertical-margin', marginsGapChanged);
-    gsettings.connect('changed::column-gap', marginsGapChanged);
+    signals!.connect(gsettings, 'changed::vertical-margin', marginsGapChanged);
+    signals!.connect(gsettings, 'changed::column-gap', marginsGapChanged);
 
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
     spaces = new Spaces();
