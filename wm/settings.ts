@@ -47,7 +47,9 @@ export type Prefs = {
 
 export let prefs: Prefs | null;
 let gsettings: Gio.Settings | null;
+export let winprops: WinProp[] = [];
 export function enable(extension: Extension) {
+    winprops = [];
     gsettings = extension.getSettings();
 
     prefs = {} as Prefs;
@@ -179,7 +181,6 @@ function maybeRegex(value: string | undefined): string | RegExp | undefined {
      float: true
    })
 */
-export let winprops: WinProp[] = [];
 function winpropMatches(metaWindow: Meta.Window, prop: WinProp) {
     const wmClass = metaWindow.wm_class || '';
     const title = metaWindow.title;
@@ -273,14 +274,21 @@ function defwinprop(spec: WinPropSpec) {
  */
 function addWinpropsFromGSettings() {
     // add gsetting (user config) winprops
-    gsettings!
+    const props = gsettings!
         .get_value<'as'>('winprops')
         .deep_unpack()
-        .map(value => JSON.parse(value))
-        .forEach(prop => {
-            prop.gsetting = true;
-            defwinprop(prop);
+        .flatMap(value => {
+            try {
+                return [JSON.parse(value)];
+            } catch (e) {
+                console.warn('#winprops', 'skipping invalid entry', e);
+                return [];
+            }
         });
+    props.forEach(prop => {
+        prop.gsetting = true;
+        defwinprop(prop);
+    });
 }
 
 /**
