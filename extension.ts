@@ -71,8 +71,11 @@ export default class AlbumWM extends Extension {
         this._resource = Gio.Resource.load(`${this.path}/albumwm.gresource`);
         Gio.resources_register(this._resource);
         this.modules.forEach(m => {
-            if (m['enable']) {
+            if (!m['enable']) return;
+            try {
                 m.enable(this);
+            } catch (e) {
+                console.error('#AlbumWM module enable failed', e);
             }
         });
     }
@@ -81,8 +84,11 @@ export default class AlbumWM extends Extension {
         console.log('#AlbumWM disabled');
         this.prepareForDisable();
         [...this.modules].reverse().forEach(m => {
-            if (m['disable']) {
+            if (!m['disable']) return;
+            try {
                 m.disable();
+            } catch (e) {
+                console.error('#AlbumWM module disable failed', e);
             }
         });
         Gio.resources_unregister(this._resource!);
