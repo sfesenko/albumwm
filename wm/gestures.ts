@@ -127,6 +127,7 @@ function shouldPropagate(fingers: number) {
 }
 
 export function disable() {
+    swipeTrackersEnable(true);
     signals!.destroy();
     signals = null;
     touchpadSettings = null;
@@ -439,7 +440,7 @@ export function findTargetWindow(
  */
 export function swipeTrackersEnable(option?: boolean) {
     const enabled = option ?? true;
-    Patches.swipeTrackers!.forEach(t => {
+    Patches.swipeTrackers?.forEach(t => {
         /* Disabling a tracker mid-gesture makes gnome-shell interrupt it,
          * breaking the overview animation. State enum isn't exported;
          * NONE is 0. */
