@@ -1230,6 +1230,7 @@ export class Space extends Array<Array<Window>> {
          * layout that snaps the still-floating clone back to its old frame. */
         Floating.easeFloating(metaWindow, targetX, targetY, {
             onComplete: () => {
+                if (!Settings.prefs) return;
                 delete metaWindow._floatFrame;
                 Main.activateWindow(metaWindow);
             },
@@ -1468,6 +1469,7 @@ export class Space extends Array<Array<Window>> {
     }
 
     moveDone(focusedWindowCallback = (_focusedWindow: Meta.Window) => {}) {
+        if (!Settings.prefs) return;
         if (
             this.cloneContainer.x !== this.targetX ||
             this.actor.y !== 0 ||
@@ -3618,6 +3620,7 @@ export function minimizeHandler(metaWindow: Window) {
 */
 export function showHandler(actor: Meta.WindowActor) {
     const metaWindow = actor.meta_window! as Window;
+    if (!metaWindow.clone) return;
     const onActive =
         metaWindow.get_workspace() === workspaceManager.get_active_workspace();
 
@@ -3661,7 +3664,7 @@ export function animateWindow(metaWindow: Window) {
 
 export function isWindowAnimating(metaWindow: Window) {
     const clone = metaWindow.clone;
-    return clone.get_parent() && clone.cloneActor.visible;
+    return !!clone?.get_parent() && clone.cloneActor.visible;
 }
 
 export function toggleMaximizeHorizontally(metaWindow: Window) {
